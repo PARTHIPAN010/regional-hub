@@ -4,7 +4,7 @@
 Lightweight visitor intake system with:
 - Backend: FastAPI (Python)
 - Storage: Excel (`visitors.xlsx`) using `pandas` + `openpyxl`
-- Frontend: Landing page served by FastAPI
+- UI files served directly by FastAPI from the backend folder
 - Notifications: Confirmation email via SMTP after submission
 
 ## Project Structure
@@ -12,13 +12,16 @@ Lightweight visitor intake system with:
 ```
 /project
   /backend
+    index.html
+    admin.html
     main.py
     requirements.txt
     .env.example
-  /frontend
-    index.html
-    app.js
-    styles.css
+    /static
+      app.js
+      admin.js
+      styles.css
+      itnt-logo.jpeg
   visitors.xlsx (generated automatically)
   README.md
 ```

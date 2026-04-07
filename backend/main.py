@@ -19,9 +19,9 @@ from pydantic import BaseModel, EmailStr, constr
 from starlette.background import BackgroundTask
 
 BASE_DIR = Path(__file__).resolve().parent
-FRONTEND_DIR = BASE_DIR.parent / "frontend"
-INDEX_FILE = FRONTEND_DIR / "index.html"
-ADMIN_INDEX_FILE = FRONTEND_DIR / "admin.html"
+STATIC_DIR = BASE_DIR / "static"
+INDEX_FILE = BASE_DIR / "index.html"
+ADMIN_INDEX_FILE = BASE_DIR / "admin.html"
 load_dotenv(BASE_DIR / ".env")
 load_dotenv(BASE_DIR.parent / ".env")
 
@@ -322,7 +322,7 @@ def send_submission_notifications(
     return {"email_sent": True, "admin_notified": admin_message is not None}
 
 
-app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
+app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 
 @app.on_event("startup")
