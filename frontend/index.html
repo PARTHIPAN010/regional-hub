@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="Regional Hub visitor intake form for collecting visitor details and sending confirmation emails."
+    />
+    <meta name="theme-color" content="#0e7c66" />
+    <title>Regional Hub Visitor Intake</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="hero-panel">
+        <section class="hero-copy" aria-labelledby="page-title">
+          <img class="hero-logo" src="/static/itnt-logo.jpeg" alt="iTNT logo" />
+          <p class="eyebrow">Regional Hub Visitor Intake</p>
+          <h1 id="page-title">Submit your details to receive confirmation of your visit.</h1>
+          <p class="hero-text">
+            Use this page to share your visitor details with the Regional Hub team. Once
+            submitted with your e-signature, your record is saved and a confirmation
+            email is sent to the email address you provide while the Regional Hub team is
+            also notified.
+          </p>
+
+          <div class="hero-points" aria-label="Key benefits">
+            <span>Single-step submission</span>
+            <span>Email confirmation</span>
+            <span>Secure internal record</span>
+          </div>
+
+          <div class="info-grid">
+            <article class="info-card">
+              <h2>What happens next</h2>
+              <p>
+                Your submission is stored by the Regional Hub system and the email address
+                you enter will receive an acknowledgement message.
+              </p>
+            </article>
+
+            <article class="info-card">
+              <h2>Before you submit</h2>
+              <p>
+                Make sure your name, organization, mobile number, email address, and
+                purpose are accurate, then add your e-signature before submitting.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="form-card" aria-labelledby="form-title">
+          <div class="card-header">
+            <p class="card-kicker">Submission Form</p>
+            <h2 id="form-title">Visitor Details</h2>
+            <p>Complete all fields below and submit once.</p>
+          </div>
+
+          <div id="statusBanner" class="status-banner" hidden role="status" aria-live="polite"></div>
+
+          <form id="visitorForm" class="visitor-form" novalidate>
+            <label>
+              <span>Full Name</span>
+              <input
+                id="visitor_name"
+                name="visitor_name"
+                type="text"
+                autocomplete="name"
+                placeholder="Enter your full name"
+                required
+              />
+            </label>
+
+            <label>
+              <span>Organization Name</span>
+              <input
+                id="organization_name"
+                name="organization_name"
+                type="text"
+                autocomplete="organization"
+                placeholder="Enter your organization"
+                required
+              />
+            </label>
+
+            <label>
+              <span>Contact Number</span>
+              <input
+                id="contact_number"
+                name="contact_number"
+                type="tel"
+                inputmode="tel"
+                autocomplete="tel"
+                placeholder="Enter your mobile number"
+                required
+              />
+            </label>
+
+            <label>
+              <span>Email Address</span>
+              <input
+                id="mail_id"
+                name="mail_id"
+                type="email"
+                autocomplete="email"
+                placeholder="Enter your email address"
+                required
+              />
+            </label>
+
+            <fieldset id="regionField" class="selection-fieldset full-width">
+              <legend class="field-legend">Region</legend>
+              <p id="regionHelp" class="field-help">
+                Select the Regional Hub handling this visitor submission.
+              </p>
+              <div class="region-options" aria-describedby="regionHelp">
+                <label class="region-option">
+                  <input type="checkbox" name="region" value="Trichy" />
+                  <span>Trichy</span>
+                </label>
+                <label class="region-option">
+                  <input type="checkbox" name="region" value="Madurai" />
+                  <span>Madurai</span>
+                </label>
+                <label class="region-option">
+                  <input type="checkbox" name="region" value="Coimbatore" />
+                  <span>Coimbatore</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <label class="full-width">
+              <span>Purpose of Visit</span>
+              <textarea
+                id="purpose"
+                name="purpose"
+                rows="4"
+                placeholder="Tell us why you are contacting the Regional Hub"
+                required
+              ></textarea>
+            </label>
+
+            <label class="full-width">
+              <span>Need Any Further Support?</span>
+              <input
+                id="further_support"
+                name="further_support"
+                type="text"
+                autocomplete="off"
+                placeholder="Mention any extra support you need (optional)"
+              />
+            </label>
+
+            <div class="signature-field full-width">
+              <div class="signature-header">
+                <span>E-Signature</span>
+                <button id="clearSignature" class="clear-signature-button" type="button">
+                  Clear
+                </button>
+              </div>
+              <p class="signature-help">
+                Sign inside the box using your mouse, finger, or stylus.
+              </p>
+              <div id="signaturePadFrame" class="signature-pad-frame">
+                <canvas
+                  id="signaturePad"
+                  class="signature-pad"
+                  aria-label="Electronic signature pad"
+                  tabindex="0"
+                ></canvas>
+              </div>
+            </div>
+
+            <button id="submitButton" type="submit">Submit Details</button>
+          </form>
+
+          <p class="form-footnote">
+            A confirmation email is sent after successful submission.
+          </p>
+          <a class="admin-back-link" href="/admin">Open admin dashboard</a>
+        </section>
+      </section>
+    </main>
+    <noscript>
+      <section class="noscript-shell">
+        <div class="noscript-card">
+          <h2>JavaScript is required</h2>
+          <p>Enable JavaScript to submit the Regional Hub visitor form.</p>
+        </div>
+      </section>
+    </noscript>
+    <script src="/static/app.js"></script>
+  </body>
+</html>

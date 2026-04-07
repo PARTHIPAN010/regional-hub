@@ -1,0 +1,7 @@
+fastapi
+uvicorn[standard]
+pandas
+openpyxl
+python-dotenv
+filelock
+email-validator

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Protected Regional Hub admin dashboard for reviewing registrations and exporting records."
+    />
+    <meta name="theme-color" content="#0e7c66" />
+    <title>Regional Hub Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="admin-page-shell">
+      <section class="admin-layout">
+        <section class="admin-info">
+          <p class="eyebrow">Regional Hub Admin</p>
+          <h1>Review all registrations and export them anytime.</h1>
+          <p class="hero-text">
+            Enter the admin password to open the registration dashboard. You can review
+            every submission, including the saved e-signature, and export the full Excel
+            workbook whenever needed.
+          </p>
+          <div class="hero-points" aria-label="Admin features">
+            <span>Password protected</span>
+            <span>Signature visibility</span>
+            <span>Excel export</span>
+          </div>
+          <a class="admin-back-link" href="/">Back to submission page</a>
+        </section>
+
+        <section class="admin-card">
+          <div id="adminStatusBanner" class="status-banner" hidden role="status" aria-live="polite"></div>
+
+          <section id="loginPanel" class="admin-panel">
+            <div class="card-header">
+              <p class="card-kicker">Admin Login</p>
+              <h2>Enter password</h2>
+              <p>Use the admin password to unlock the registration dashboard.</p>
+            </div>
+
+            <form id="adminLoginForm" class="admin-login-form" novalidate>
+              <label>
+                <span>Admin Password</span>
+                <input
+                  id="adminPassword"
+                  name="adminPassword"
+                  type="password"
+                  autocomplete="current-password"
+                  placeholder="Enter admin password"
+                  required
+                />
+              </label>
+              <button id="loginButton" type="submit">Open Dashboard</button>
+            </form>
+          </section>
+
+          <section id="dashboardPanel" class="admin-panel" hidden>
+            <div class="admin-toolbar">
+              <div class="admin-toolbar-copy">
+                <p class="card-kicker">Registrations</p>
+                <h2>Submission Dashboard</h2>
+                <p id="registrationCount" class="admin-count">0 registrations</p>
+              </div>
+
+              <div class="admin-actions">
+                <button id="refreshButton" type="button" class="admin-secondary-button">
+                  Refresh
+                </button>
+                <button id="exportButton" type="button">Export XLSX</button>
+                <button id="logoutButton" type="button" class="admin-secondary-button">
+                  Logout
+                </button>
+              </div>
+            </div>
+
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>S.No</th>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Organization</th>
+                    <th>Contact</th>
+                    <th>Email</th>
+                    <th>Region</th>
+                    <th>Purpose</th>
+                    <th>Further Support</th>
+                    <th>E-Signature</th>
+                  </tr>
+                </thead>
+                <tbody id="registrationsBody"></tbody>
+              </table>
+              <div id="emptyRegistrations" class="admin-empty" hidden>
+                No registrations found.
+              </div>
+            </div>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <noscript>
+      <section class="noscript-shell">
+        <div class="noscript-card">
+          <h2>JavaScript is required</h2>
+          <p>Enable JavaScript to use the Regional Hub admin dashboard.</p>
+        </div>
+      </section>
+    </noscript>
+
+    <script src="/static/admin.js"></script>
+  </body>
+</html>
