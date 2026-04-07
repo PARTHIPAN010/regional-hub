@@ -1,0 +1,6 @@
+backend/.env
+.env
+backend/.venv/
+**/__pycache__/
+visitors.xlsx.lock
+backend/regional-hub-export-*.xlsx
