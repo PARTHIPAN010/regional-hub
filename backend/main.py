@@ -70,7 +70,7 @@ EMAIL_USE_TLS = os.getenv("MAIL_USE_TLS", os.getenv("EMAIL_USE_TLS", "true")).lo
 ADMIN_NOTIFICATION_EMAIL = os.getenv("ADMIN_NOTIFICATION_EMAIL", EMAIL_FROM or EMAIL_USERNAME)
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin$321")
 APP_HOST = os.getenv("APP_HOST", "127.0.0.1")
-APP_PORT = int(os.getenv("APP_PORT", "8000"))
+APP_PORT = int(os.getenv("APP_PORT", "7000"))
 APP_RELOAD = os.getenv("APP_RELOAD", "false").lower() in {"1", "true", "yes", "on"}
 
 
