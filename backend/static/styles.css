@@ -41,6 +41,8 @@ textarea {
 .page-shell {
   min-height: 100vh;
   min-height: 100dvh;
+  max-width: 1400px;
+  margin: 0px auto;
   padding: clamp(16px, 3vw, 32px);
   display: flex;
   align-items: center;
@@ -48,11 +50,10 @@ textarea {
 }
 
 .hero-panel {
-  width: min(1120px, 100%);
+  width: min(1300px, 100%);
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(320px, 520px);
+  grid-template-columns: minmax(0, 1fr) minmax(400px, 700px);
   gap: clamp(18px, 2.5vw, 28px);
-  align-items: stretch;
 }
 
 .admin-page-shell {
@@ -88,7 +89,7 @@ textarea {
   padding: clamp(24px, 4vw, 44px);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
 }
 
 .admin-card {
@@ -159,7 +160,7 @@ textarea {
 
 .hero-copy h1 {
   margin: 0;
-  font-size: clamp(2.15rem, 5vw, 4.4rem);
+  font-size: 60px;
   line-height: 0.98;
   letter-spacing: -0.04em;
 }
@@ -196,7 +197,7 @@ textarea {
 }
 
 .card-kicker {
-  margin: 0 0 8px;
+  margin: 20px 0 8px;
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.18em;
@@ -278,6 +279,7 @@ textarea {
 
 .admin-actions button,
 .admin-login-form button {
+  margin-top: 39px;
   border: none;
   border-radius: 16px;
   min-height: 50px;
@@ -549,7 +551,7 @@ textarea {
 .admin-table-wrap {
   border: 1px solid rgba(14, 124, 102, 0.12);
   border-radius: 22px;
-  overflow: hidden;
+  overflow: scroll;
   background: rgba(255, 255, 255, 0.46);
 }
 
