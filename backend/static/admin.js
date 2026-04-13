@@ -1,5 +1,5 @@
 const API_BASE = window.location.origin;
-const ADMIN_STORAGE_KEY = "regionalHubAdminKey";
+const LEGACY_ADMIN_STORAGE_KEY = "regionalHubAdminKey";
 
 const loginPanel = document.getElementById("loginPanel");
 const dashboardPanel = document.getElementById("dashboardPanel");
@@ -14,7 +14,13 @@ const registrationCount = document.getElementById("registrationCount");
 const registrationsBody = document.getElementById("registrationsBody");
 const emptyRegistrations = document.getElementById("emptyRegistrations");
 
-let adminKey = sessionStorage.getItem(ADMIN_STORAGE_KEY) || "";
+let adminKey = "";
+
+try {
+  sessionStorage.removeItem(LEGACY_ADMIN_STORAGE_KEY);
+} catch (error) {
+  // Ignore storage errors; the admin key is intentionally page-only now.
+}
 
 const setStatus = (type, text) => {
   adminStatusBanner.hidden = false;
@@ -85,7 +91,6 @@ const renderRegistrations = (items) => {
 
 const handleUnauthorized = () => {
   adminKey = "";
-  sessionStorage.removeItem(ADMIN_STORAGE_KEY);
   setAuthMode(false);
   setStatus("error", "Admin session expired. Please enter the password again.");
   adminPasswordInput.focus();
@@ -140,7 +145,6 @@ adminLoginForm.addEventListener("submit", async event => {
     }
 
     adminKey = password;
-    sessionStorage.setItem(ADMIN_STORAGE_KEY, adminKey);
     setAuthMode(true);
     setStatus("success", result.message || "Admin access granted.");
     await loadRegistrations();
@@ -221,7 +225,6 @@ exportButton.addEventListener("click", async () => {
 
 logoutButton.addEventListener("click", () => {
   adminKey = "";
-  sessionStorage.removeItem(ADMIN_STORAGE_KEY);
   adminLoginForm.reset();
   registrationsBody.innerHTML = "";
   emptyRegistrations.hidden = true;
@@ -230,18 +233,4 @@ logoutButton.addEventListener("click", () => {
   adminPasswordInput.focus();
 });
 
-if (adminKey) {
-  setAuthMode(true);
-  loadRegistrations()
-    .then(loaded => {
-      if (loaded) {
-        setStatus("success", "Admin access restored.");
-      }
-    })
-    .catch(error => {
-      handleUnauthorized();
-      setStatus("error", error.message || "Could not restore admin session.");
-    });
-} else {
-  setAuthMode(false);
-}
+setAuthMode(false);

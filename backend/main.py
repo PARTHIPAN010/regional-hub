@@ -117,13 +117,35 @@ def ensure_file_exists():
             ) from exc
 
 
+def normalize_date_value(value):
+    if pd.isna(value):
+        return ""
+
+    if isinstance(value, datetime):
+        return value.date().isoformat()
+
+    if isinstance(value, dt_date):
+        return value.isoformat()
+
+    text = str(value).strip()
+    if not text:
+        return ""
+
+    try:
+        return datetime.fromisoformat(text.replace("Z", "+00:00")).date().isoformat()
+    except ValueError:
+        return text
+
+
 def normalize_visitors_df(df: pd.DataFrame) -> pd.DataFrame:
     normalized = df.copy()
     for column in COLUMNS:
         if column not in normalized.columns:
             normalized[column] = ""
     normalized = normalized.loc[:, COLUMNS]
-    return normalized.where(pd.notna(normalized), "")
+    normalized = normalized.where(pd.notna(normalized), "")
+    normalized["Date"] = normalized["Date"].map(normalize_date_value)
+    return normalized
 
 
 @contextmanager
@@ -169,8 +191,16 @@ def sync_data_file_columns_unlocked():
             detail="visitors.xlsx is currently in use. Close the file and try again.",
         ) from exc
 
+    raw_normalized_blanks = raw_df.copy()
+    for column in COLUMNS:
+        if column not in raw_normalized_blanks.columns:
+            raw_normalized_blanks[column] = ""
+    raw_normalized_blanks = raw_normalized_blanks.loc[:, COLUMNS].where(
+        pd.notna(raw_normalized_blanks.loc[:, COLUMNS]), ""
+    )
+
     normalized_df = normalize_visitors_df(raw_df)
-    if list(raw_df.columns) != COLUMNS:
+    if list(raw_df.columns) != COLUMNS or not normalized_df.equals(raw_normalized_blanks):
         save_visitors_df_unlocked(normalized_df)
 
 
