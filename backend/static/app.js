@@ -123,6 +123,38 @@ const clearStatus = () => {
   statusBanner.textContent = "";
 };
 
+const formatApiError = (detail, fallbackMessage) => {
+  if (!detail) {
+    return fallbackMessage;
+  }
+
+  if (typeof detail === "string") {
+    return detail;
+  }
+
+  if (Array.isArray(detail)) {
+    const messages = detail
+      .map(error => {
+        if (typeof error === "string") {
+          return error;
+        }
+
+        const field = Array.isArray(error.loc) ? error.loc[error.loc.length - 1] : "";
+        const message = error.msg || fallbackMessage;
+        return field ? `${field}: ${message}` : message;
+      })
+      .filter(Boolean);
+
+    return messages.length ? messages.join(" ") : fallbackMessage;
+  }
+
+  if (typeof detail === "object") {
+    return detail.message || detail.msg || fallbackMessage;
+  }
+
+  return fallbackMessage;
+};
+
 const getPayload = () => {
   return {
     ...Object.fromEntries(
@@ -261,7 +293,9 @@ form.addEventListener("submit", async event => {
 
     const result = await response.json();
     if (!response.ok) {
-      throw new Error(result.detail || "Your submission could not be completed.");
+      throw new Error(
+        formatApiError(result.detail, "Your submission could not be completed.")
+      );
     }
 
     setStatus(

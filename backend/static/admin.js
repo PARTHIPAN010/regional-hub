@@ -34,6 +34,38 @@ const clearStatus = () => {
   adminStatusBanner.textContent = "";
 };
 
+const formatApiError = (detail, fallbackMessage) => {
+  if (!detail) {
+    return fallbackMessage;
+  }
+
+  if (typeof detail === "string") {
+    return detail;
+  }
+
+  if (Array.isArray(detail)) {
+    const messages = detail
+      .map(error => {
+        if (typeof error === "string") {
+          return error;
+        }
+
+        const field = Array.isArray(error.loc) ? error.loc[error.loc.length - 1] : "";
+        const message = error.msg || fallbackMessage;
+        return field ? `${field}: ${message}` : message;
+      })
+      .filter(Boolean);
+
+    return messages.length ? messages.join(" ") : fallbackMessage;
+  }
+
+  if (typeof detail === "object") {
+    return detail.message || detail.msg || fallbackMessage;
+  }
+
+  return fallbackMessage;
+};
+
 const setAuthMode = (authenticated) => {
   loginPanel.hidden = authenticated;
   dashboardPanel.hidden = !authenticated;
@@ -108,7 +140,7 @@ const loadRegistrations = async () => {
   }
 
   if (!response.ok) {
-    throw new Error(result.detail || "Could not load registrations.");
+    throw new Error(formatApiError(result.detail, "Could not load registrations."));
   }
 
   registrationCount.textContent = `${result.count} registration${result.count === 1 ? "" : "s"}`;
@@ -141,7 +173,7 @@ adminLoginForm.addEventListener("submit", async event => {
 
     const result = await response.json();
     if (!response.ok) {
-      throw new Error(result.detail || "Admin login failed.");
+      throw new Error(formatApiError(result.detail, "Admin login failed."));
     }
 
     adminKey = password;
@@ -193,7 +225,7 @@ exportButton.addEventListener("click", async () => {
       let detail = "Could not export registrations.";
       try {
         const result = await response.json();
-        detail = result.detail || detail;
+        detail = formatApiError(result.detail, detail);
       } catch (error) {
         detail = "Could not export registrations.";
       }

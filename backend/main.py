@@ -42,6 +42,9 @@ app.add_middleware(
 
 DATA_FILE = BASE_DIR.parent / "visitors.xlsx"
 LOCK_FILE = BASE_DIR.parent / "visitors.xlsx.lock"
+DATA_FILE_BUSY_MESSAGE = (
+    "The registration file is temporarily busy. Please wait a moment and submit again."
+)
 
 COLUMNS = [
     "S.No",
@@ -70,7 +73,7 @@ EMAIL_USE_TLS = os.getenv("MAIL_USE_TLS", os.getenv("EMAIL_USE_TLS", "true")).lo
 ADMIN_NOTIFICATION_EMAIL = os.getenv("ADMIN_NOTIFICATION_EMAIL", EMAIL_FROM or EMAIL_USERNAME)
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin$321")
 APP_HOST = os.getenv("APP_HOST", "127.0.0.1")
-APP_PORT = int(os.getenv("APP_PORT", "7000"))
+APP_PORT = int(os.getenv("APP_PORT", "7010"))
 APP_RELOAD = os.getenv("APP_RELOAD", "false").lower() in {"1", "true", "yes", "on"}
 
 
@@ -113,7 +116,7 @@ def ensure_file_exists():
         except PermissionError as exc:
             raise HTTPException(
                 status_code=503,
-                detail="visitors.xlsx is currently in use. Close the file and try again.",
+                detail=DATA_FILE_BUSY_MESSAGE,
             ) from exc
 
 
@@ -156,7 +159,7 @@ def data_file_lock():
             ensure_file_exists()
             yield
     except Timeout as exc:
-        raise HTTPException(status_code=503, detail="The data file is locked. Please retry.") from exc
+        raise HTTPException(status_code=503, detail=DATA_FILE_BUSY_MESSAGE) from exc
 
 
 def load_visitors_df_unlocked() -> pd.DataFrame:
@@ -166,7 +169,7 @@ def load_visitors_df_unlocked() -> pd.DataFrame:
     except PermissionError as exc:
         raise HTTPException(
             status_code=503,
-            detail="visitors.xlsx is currently in use. Close the file and try again.",
+            detail=DATA_FILE_BUSY_MESSAGE,
         ) from exc
 
 
@@ -177,7 +180,7 @@ def save_visitors_df_unlocked(df: pd.DataFrame):
     except PermissionError as exc:
         raise HTTPException(
             status_code=503,
-            detail="visitors.xlsx is currently in use. Close the file and try again.",
+            detail=DATA_FILE_BUSY_MESSAGE,
         ) from exc
 
 
@@ -188,7 +191,7 @@ def sync_data_file_columns_unlocked():
     except PermissionError as exc:
         raise HTTPException(
             status_code=503,
-            detail="visitors.xlsx is currently in use. Close the file and try again.",
+            detail=DATA_FILE_BUSY_MESSAGE,
         ) from exc
 
     raw_normalized_blanks = raw_df.copy()
@@ -479,7 +482,7 @@ def create_export_snapshot() -> Path:
         except PermissionError as exc:
             raise HTTPException(
                 status_code=503,
-                detail="visitors.xlsx is currently in use. Close the file and try again.",
+                detail=DATA_FILE_BUSY_MESSAGE,
             ) from exc
     return temp_path
 
